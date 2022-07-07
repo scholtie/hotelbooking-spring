@@ -35,13 +35,20 @@ public class UsersController {
         return repository.findAll();
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<Users> loginUser(@PathVariable(value = "id") long usersId) throws ResourceNotFoundException {
+        logger.info("Get user by id...");
+        Users users = repository.findById(usersId).
+                orElseThrow(() -> new ResourceNotFoundException("User not found for this id:: " + usersId));
+        return ResponseEntity.ok().body(users);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<Users> getUserById(@PathVariable(value = "id") long usersId) throws ResourceNotFoundException {
         logger.info("Get user by id...");
         Users users = repository.findById(usersId).
                 orElseThrow(() -> new ResourceNotFoundException("User not found for this id:: " + usersId));
         return ResponseEntity.ok().body(users);
-
     }
 
     @PostMapping("/users")
